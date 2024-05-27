@@ -35,9 +35,6 @@ def remove_emojis(data):
         "\u231a"
         "\ufe0f"  # dingbats
         "\u3030"
-        "/[!@#$%^&*]/g"
-        "\n"
-        "\s+"
         "]+",
         re.UNICODE,
     )
@@ -61,6 +58,7 @@ def scrape_messenger_data(path, sender_name):
             for message in data["messages"]:
                 if message.get("content"):
                     sender = message.get("sender_name")
+                    content = message.get("content").encode("latin_1").decode("utf-8")
                     content = remove_emojis(
                         message.get("content").encode("latin_1").decode("utf-8")
                     )
@@ -78,3 +76,6 @@ def scrape_messenger_data(path, sender_name):
     with open("dataset.txt", "w") as output_file:
         for data in raw_dataset:
             output_file.write(f"{data}\n")
+
+
+scrape_messenger_data("./messenger_data", "Paolo Espiritu")
